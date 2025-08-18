@@ -60,10 +60,10 @@ We can bypass this with
 - By including `<input name="attributes">`inside the `<form>` element, you "clobber" (overwrite) the form's default `.attributes` property. Instead of pointing to the browser's internal list of attributes (a NamedNodeMap), `form.attributes` now points to the `<input>` element itself. This is called **DOM Clobbering**.
 - The `<input>`element does not have a `.length` property. Therefore, when the sanitizer checks the condition `n.attributes.length > 0`, it is evaluating `undefined > 0`, which is `false`.
 - The while loop is never entered, and the removeAttribute code is never executed for the <form> tag. The malicious onmouseover="alert(1)" attribute remains intact. When the final, supposedly "sanitized" HTML is rendered, moving the mouse over the form will trigger the XSS payload.
-- But we still have a problem, when the bot visits the site, it the form element needs a onmouseover to trigger the function and the `<form>` element doesnt have the `onload` property
+- But we still have a problem, when the bot visits the site, the form element needs a onmouseover to trigger the function and the `<form>` element doesn't have the `onload` property
 - Upon some googling and gpting, I found a way to invoke the function on the bot just loading the page.
   - At first I tried `onfocus` with `autofocus` attributes in the form, but they didn't work as the autofocus was converted to `autofocus=""` in the result.
-  - Next, I tried `<style>` attribute making the form an animation and using the `onanimationed` attribute in the form element, executing the function required aand it WORKED!
+  - Next, I tried `<style>` attribute making the form an animation and using the `onanimationed` attribute in the form element, executing the function required and it WORKED!
 
 ```
 <style>@keyframes x{}</style><form style="animation-name:x" onanimationend="alert(1)"><input id="attributes"></form>
